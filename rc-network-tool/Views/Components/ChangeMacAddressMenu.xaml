@@ -7,19 +7,12 @@
              x:DataType="viewmodels:MainViewModel">
     
     <Border Grid.Row="2" 
-        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}">
+            BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}"
+            Shadow="0 2 4 Black 0.28">
 
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="12" />
         </Border.StrokeShape>
-
-        <Border.Shadow>
-            <Shadow
-            Brush="Black"
-            Radius="4"
-            Offset="0,2"
-            Opacity="0.28" />
-        </Border.Shadow>
 
         <VerticalStackLayout Padding="10">
 

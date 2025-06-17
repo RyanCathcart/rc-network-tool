@@ -81,45 +81,9 @@
 
             </Border>
 
-            <Border Grid.Row="1" 
-                    BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}"
-                    Shadow="0 2 4 Black 0.28">
+            <components:ConnectionDetailsView Grid.Row="1" />
 
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12" />
-                </Border.StrokeShape>
-
-                <VerticalStackLayout Padding="10">
-
-                    <Label Text="Connection Details" FontSize="Title" Margin="0,0,0,10" />
-
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="20">
-
-                        <Label Grid.Row="0" Grid.Column="0" Text="Connection Name:" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding SelectedAdapter.Name}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                        <Label Grid.Row="1" Grid.Column="0" Text="Device:" />
-                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding SelectedAdapter.Description}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                        <Label Grid.Row="2" Grid.Column="0" Text="Hardware ID:" />
-                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding SelectedAdapter.HardwareId}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                        <Label Grid.Row="3" Grid.Column="0" Text="Config ID:" />
-                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding SelectedAdapter.Id}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                        <Label Grid.Row="4" Grid.Column="0" Text="Original MAC Address:" />
-                        <Label Grid.Row="4" Grid.Column="1" Text="{Binding SelectedAdapter.OriginalMacAddress}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                        <Label Grid.Row="5" Grid.Column="0" Text="Current MAC Address:" />
-                        <Label Grid.Row="5" Grid.Column="1" Text="{Binding SelectedAdapter.CurrentMacAddress}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
-
-                    </Grid>
-
-                </VerticalStackLayout>
-
-            </Border>
-
-            <components:ChangeMacAddressMenu Grid.Row="3" />
+            <components:ChangeMacAddressMenu Grid.Row="2" />
 
         </Grid>
         
