@@ -38,24 +38,24 @@
                 </Entry>
 
                 <Button Text="Random MAC Address" 
-                    Command="{Binding GenerateRandomMacCommand}" />
+                        Command="{Binding GenerateRandomMacCommand}" />
 
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
                 <Picker x:Name="MacRegistryPicker"
-                    Margin="0,10" 
-                    WidthRequest="425" 
-                    HorizontalOptions="Start" 
-                    ItemsSource="{Binding MacOuiRegistry}"
-                    SelectedIndex="{Binding SelectedMacOuiVendorIndex}"
-                    ItemDisplayBinding="{Binding Display}">
+                        Margin="0,10" 
+                        WidthRequest="425" 
+                        HorizontalOptions="Start" 
+                        ItemsSource="{Binding MacOuiRegistry}"
+                        SelectedIndex="{Binding SelectedMacOuiVendorIndex}"
+                        ItemDisplayBinding="{Binding Display}">
 
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior
-                        EventName="SelectedIndexChanged"
-                        Command="{Binding MacOuiVendorSelectedCommand}"
-                        BindingContext="{Binding Source={x:Reference MacRegistryPicker}, Path=BindingContext}" />
+                            EventName="SelectedIndexChanged"
+                            Command="{Binding MacOuiVendorSelectedCommand}"
+                            BindingContext="{Binding Source={x:Reference MacRegistryPicker}, Path=BindingContext}" />
                     </Picker.Behaviors>
 
                 </Picker>
@@ -66,9 +66,9 @@
 
                     <CheckBox.Behaviors>
                         <toolkit:EventToCommandBehavior
-                        EventName="CheckedChanged"
-                        Command="{Binding Use02AsFirstOctetChangedCommand}"
-                        BindingContext="{Binding Source={x:Reference Use02AsFirstOctetCheckBox}, Path=BindingContext}" />
+                            EventName="CheckedChanged"
+                            Command="{Binding Use02AsFirstOctetChangedCommand}"
+                            BindingContext="{Binding Source={x:Reference Use02AsFirstOctetCheckBox}, Path=BindingContext}" />
                     </CheckBox.Behaviors>
 
                 </CheckBox>

@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:rc_network_tool.Models"
+    xmlns:converters="clr-namespace:rc_network_tool.Utils.Converters"
     xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid">
 
 <!--Default .NET MAUI Styles 
@@ -482,7 +483,8 @@
     </Style>
 -->
     
-    <!--Styles for akgul.Maui.DataGrid views-->
+    <!--Styles for akgul.Maui.DataGrid controls-->
+    
     <Style TargetType="Label" x:Key="dgHeaderLabelStyleLeft">
         <Setter Property="HorizontalTextAlignment" Value="Start" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
@@ -509,15 +511,19 @@
         <Setter Property="LineBreakMode" Value="TailTruncation" />
         <Setter Property="TextColor" Value="{AppThemeBinding Dark=Black, Light=White}" />
     </Style>
+    
 
+    <converters:AdapterSpeedLongToStringConverter x:Key="AdapterSpeedLongToStringConverter" />
+
+    
     <DataTemplate x:DataType="x:String" x:Key="dgCellTemplateLeft">
         <Grid RowDefinitions="*,Auto">
             <Label Text="{Binding .}" FontSize="13"
-           LineBreakMode="TailTruncation"
-           Padding="10,0"
-           HorizontalTextAlignment="Start" 
-           VerticalTextAlignment="Center"
-           VerticalOptions="Fill"/>
+                   LineBreakMode="TailTruncation"
+                   Padding="10,0"
+                   HorizontalTextAlignment="Start" 
+                   VerticalTextAlignment="Center"
+                   VerticalOptions="Fill"/>
             <BoxView Grid.Row="1" BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600}, Light={StaticResource Gray100}}" HeightRequest="1" HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>
@@ -525,23 +531,24 @@
     <DataTemplate x:DataType="x:String" x:Key="dgCellTemplateCenter">
         <Grid RowDefinitions="*,Auto">
             <Label Text="{Binding .}" FontSize="13"
-               LineBreakMode="TailTruncation"
-               Padding="10,0"
-               HorizontalTextAlignment="Center" 
-               VerticalTextAlignment="Center"
-               VerticalOptions="Fill"/>
+                   LineBreakMode="TailTruncation"
+                   Padding="10,0"
+                   HorizontalTextAlignment="Center" 
+                   VerticalTextAlignment="Center"
+                   VerticalOptions="Fill"/>
             <BoxView Grid.Row="1" BackgroundColor="{StaticResource Gray600}" HeightRequest="1" HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:DataType="x:String" x:Key="dgCellTemplateRight">
+    <DataTemplate x:DataType="x:Int64" x:Key="dgCellTemplateRight">
         <Grid RowDefinitions="*,Auto">
-            <Label Text="{Binding .}" FontSize="13"
-               LineBreakMode="TailTruncation"
-               Padding="10,0"
-               HorizontalTextAlignment="End" 
-               VerticalTextAlignment="Center"
-               VerticalOptions="Fill"/>
+            <Label Text="{Binding ., Converter={StaticResource AdapterSpeedLongToStringConverter}}" 
+                   FontSize="13"
+                   LineBreakMode="TailTruncation"
+                   Padding="10,0"
+                   HorizontalTextAlignment="End" 
+                   VerticalTextAlignment="Center"
+                   VerticalOptions="Fill"/>
             <BoxView Grid.Row="1" BackgroundColor="{StaticResource Gray600}" HeightRequest="1" HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>

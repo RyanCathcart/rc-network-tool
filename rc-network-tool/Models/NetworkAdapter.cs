@@ -9,7 +9,7 @@ public class NetworkAdapter
     public string? OriginalMacAddress { get; set; }
     public string? CurrentMacAddress { get; set; }
     public bool IsMacChanged => CurrentMacAddress == OriginalMacAddress;
-    public string? Speed { get; set; }
+    public long? Speed { get; set; }
     public string? OperationalStatus { get; set; }
 
     public static string ConvertMacAddressToString(string? input)

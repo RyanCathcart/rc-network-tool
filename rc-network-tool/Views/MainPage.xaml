@@ -42,32 +42,32 @@
                     <dg:DataGrid.Columns>
 
                         <dg:DataGridColumn
-                                Title="Network Connection"
-                                PropertyName="Name"
-                                Width="*"
-                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}" />
+                            Title="Network Connection"
+                            PropertyName="Name"
+                            Width="*"
+                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                            CellTemplate="{StaticResource dgCellTemplateLeft}" />
 
                         <dg:DataGridColumn 
-                                Title="MAC Address"
-                                PropertyName="CurrentMacAddress"
-                                Width="150"
-                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}" />
+                            Title="MAC Address"
+                            PropertyName="CurrentMacAddress"
+                            Width="150"
+                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                            CellTemplate="{StaticResource dgCellTemplateLeft}" />
 
                         <dg:DataGridColumn 
-                                Title="Speed"
-                                PropertyName="Speed"
-                                Width="100"
-                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
-                                CellTemplate="{StaticResource dgCellTemplateRight}" />
+                            Title="Speed"
+                            PropertyName="Speed"
+                            Width="100"
+                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
+                            CellTemplate="{StaticResource dgCellTemplateRight}" />
 
                         <dg:DataGridColumn 
-                                Title="Status"
-                                PropertyName="OperationalStatus"
-                                Width="100"
-                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}" />
+                            Title="Status"
+                            PropertyName="OperationalStatus"
+                            Width="100"
+                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                            CellTemplate="{StaticResource dgCellTemplateLeft}" />
 
                     </dg:DataGrid.Columns>
 
