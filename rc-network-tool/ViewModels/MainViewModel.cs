@@ -147,6 +147,33 @@ public partial class MainViewModel : ObservableObject
             SelectedMacOuiVendorIndex = -1;
     }
 
+    [RelayCommand]
+    private void ApplyMacAddress()
+    {
+        if (SelectedAdapter is null) 
+            return;
+
+        // Validate MacAddressEntryText
+        string newMacAddress = MacAddressEntryText.Replace(" ", "").Replace("-", "");
+
+        if (newMacAddress.Length != 12) 
+            return;
+
+        bool successful = _networkAdapterService.SetNetworkAdapterMacAddress(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled);
+
+        if (successful)
+        {
+            NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
+                           .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+        }
+    }
+
+    [RelayCommand]
+    private void RestoreOriginalMacAddress()
+    {
+
+    }
+
     public async Task LoadMacOuiRegistryAsync()
     {
         IEnumerable<MacOuiRegistrant> macOuiRegistrants = await _macOuiRegistryService.GetRegistrantsAsync();

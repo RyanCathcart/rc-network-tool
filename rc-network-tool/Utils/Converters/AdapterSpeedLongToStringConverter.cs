@@ -14,13 +14,13 @@ class AdapterSpeedLongToStringConverter : IValueConverter
             return "Very high";
 
         else if (speed > 1_000_000_000)
-            return $"{speed / 1_000_000_000} gbps";
+            return $"{speed / 1_000_000_000} Gbps";
         
         else if (speed > 1_000_000)
-            return $"{speed / 1_000_000} mbps";
+            return $"{speed / 1_000_000} Mbps";
         
         else if (speed > 1_000)
-            return $"{speed / 1_000} kbps";
+            return $"{speed / 1_000} Kbps";
 
         else if (speed < 0)
             return $"0 bps";

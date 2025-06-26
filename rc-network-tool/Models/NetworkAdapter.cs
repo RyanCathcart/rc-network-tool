@@ -1,13 +1,17 @@
-﻿namespace rc_network_tool.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class NetworkAdapter
+namespace rc_network_tool.Models;
+
+public partial class NetworkAdapter : ObservableObject
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public string? HardwareId { get; set; }
     public string? OriginalMacAddress { get; set; }
-    public string? CurrentMacAddress { get; set; }
+
+    [ObservableProperty]
+    public partial string? CurrentMacAddress { get; set; }
     public bool IsMacChanged => CurrentMacAddress == OriginalMacAddress;
     public long? Speed { get; set; }
     public string? OperationalStatus { get; set; }

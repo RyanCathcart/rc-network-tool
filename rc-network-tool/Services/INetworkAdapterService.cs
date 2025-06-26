@@ -6,5 +6,7 @@ public interface INetworkAdapterService
 {
     IEnumerable<NetworkAdapter> GetNetworkAdapters();
 
+    public bool SetNetworkAdapterMacAddress(NetworkAdapter adapter, string newMacAddress, bool restartAdapter, bool? persistChange = true);
+
     bool IsNetworkAdapterWireless(NetworkAdapter adapter);
 }

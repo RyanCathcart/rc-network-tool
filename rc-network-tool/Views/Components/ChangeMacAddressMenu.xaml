@@ -86,8 +86,8 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Spacing="10">
-                <Button Text="Apply" />
-                <Button Text="Restore Original" />
+                <Button Text="Apply" Command="{Binding ApplyMacAddressCommand}" />
+                <Button Text="Restore Original" Command="{Binding RestoreOriginalMacAddressCommand}" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
