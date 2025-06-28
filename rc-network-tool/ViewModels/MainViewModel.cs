@@ -39,13 +39,13 @@ public partial class MainViewModel : ObservableObject
     public partial int SelectedMacOuiVendorIndex { get; set; } = -1;
 
     [ObservableProperty]
+    public partial bool Use02AsFirstOctetIsEnabled { get; set; } = false;
+    
+    [ObservableProperty]
     public partial bool RestartConnectionOnApplyIsEnabled { get; set; } = true;
 
     [ObservableProperty]
-    public partial bool PersistMacAddressIsEnabled { get; set; } = true;
-
-    [ObservableProperty]
-    public partial bool Use02AsFirstOctetIsEnabled { get; set; } = false;
+    public partial bool ReleaseIpAddressIsEnabled { get; set; } = true;   
 
     [RelayCommand]
     private void NetworkAdapterSelected()
@@ -159,7 +159,7 @@ public partial class MainViewModel : ObservableObject
         if (newMacAddress.Length != 12) 
             return;
 
-        bool successful = _networkAdapterService.SetNetworkAdapterMacAddress(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled);
+        bool successful = _networkAdapterService.SetNetworkAdapterMacAddress(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {

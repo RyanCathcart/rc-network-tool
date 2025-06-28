@@ -14,7 +14,7 @@
             <RoundRectangle CornerRadius="12" />
         </Border.StrokeShape>
 
-        <VerticalStackLayout Padding="10">
+        <VerticalStackLayout Padding="16">
 
             <Label Text="Change MAC Address" FontSize="Title" Margin="0,0,0,10" />
 
@@ -81,8 +81,8 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
-                <CheckBox IsChecked="{Binding PersistMacAddressIsEnabled}" />
-                <Label Text="Make new MAC address persistent" VerticalTextAlignment="Center" />
+                <CheckBox IsChecked="{Binding ReleaseIpAddressIsEnabled}" IsEnabled="{Binding RestartConnectionOnApplyIsEnabled}" />
+                <Label Text="Release current IP address" VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Spacing="10">

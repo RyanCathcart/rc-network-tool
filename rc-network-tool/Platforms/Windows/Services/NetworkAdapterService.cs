@@ -63,12 +63,12 @@ internal class NetworkAdapterService : INetworkAdapterService
         return networkAdapters;
     }
 
-    public bool SetNetworkAdapterMacAddress(NetworkAdapter adapter, string newMacAddress, bool restartAdapter, bool? persistChange = true)
+    public bool SetNetworkAdapterMacAddress(NetworkAdapter adapter, string newMacAddress, bool restartAdapter, bool releaseIpAddress)
     {
         if (adapter is null) 
             return false;
 
-        using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_BASE_KEY, true); // Access denied, cannot write to registry without admin privileges
+        using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_BASE_KEY, true); // Cannot write to registry without admin privileges
 
         if (registryKey is null) 
             return false;
@@ -92,6 +92,9 @@ internal class NetworkAdapterService : INetworkAdapterService
 
             if (restartAdapter && adapter.Name is not null)
             {
+                if (releaseIpAddress)
+                    ReleaseIpAddress(adapter.Name);
+                
                 DisableAdapter(adapter.Name);
                 EnableAdapter(adapter.Name);
             }
@@ -100,6 +103,20 @@ internal class NetworkAdapterService : INetworkAdapterService
         }
 
         return false;
+    }
+
+    private static void ReleaseIpAddress(string interfaceName)
+    {
+        var psi = new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = "ipconfig",
+            Arguments = $"release \"{interfaceName}\"",
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        var p = new System.Diagnostics.Process { StartInfo = psi };
+
+        p.Start();
     }
 
     private static void EnableAdapter(string interfaceName)
@@ -116,7 +133,7 @@ internal class NetworkAdapterService : INetworkAdapterService
         p.Start();
     }
 
-    static void DisableAdapter(string interfaceName)
+    private static void DisableAdapter(string interfaceName)
     {
         var psi = new System.Diagnostics.ProcessStartInfo
         {
