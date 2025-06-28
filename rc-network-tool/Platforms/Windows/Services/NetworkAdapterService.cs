@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using rc_network_tool.Models;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 
 namespace rc_network_tool.Services;
@@ -63,7 +64,7 @@ internal class NetworkAdapterService : INetworkAdapterService
         return networkAdapters;
     }
 
-    public bool SetNetworkAdapterMacAddress(NetworkAdapter adapter, string newMacAddress, bool restartAdapter, bool releaseIpAddress)
+    public async Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, string newMacAddress, bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled)
     {
         if (adapter is null) 
             return false;
@@ -75,7 +76,7 @@ internal class NetworkAdapterService : INetworkAdapterService
 
         foreach (string subKeyName in registryKey.GetSubKeyNames())
         {
-            if (int.TryParse(subKeyName, out _) == false) 
+            if (int.TryParse(subKeyName, out _) == false)
                 continue;
 
             using RegistryKey? subKey = registryKey.OpenSubKey(subKeyName, true);
@@ -90,13 +91,13 @@ internal class NetworkAdapterService : INetworkAdapterService
 
             subKey.SetValue(REGISTRY_VALUE_MAC_ADDRESS, newMacAddress, RegistryValueKind.String);
 
-            if (restartAdapter && adapter.Name is not null)
+            if (restartAdapterIsEnabled && adapter.Name is not null)
             {
-                if (releaseIpAddress)
-                    ReleaseIpAddress(adapter.Name);
+                if (releaseIpAddressIsEnabled)
+                    await ReleaseIpAddressAsync(adapter.Name);
                 
-                DisableAdapter(adapter.Name);
-                EnableAdapter(adapter.Name);
+                await DisableAdapterAsync(adapter.Name);
+                await EnableAdapterAsync(adapter.Name);
             }
 
             return true;
@@ -105,46 +106,49 @@ internal class NetworkAdapterService : INetworkAdapterService
         return false;
     }
 
-    private static void ReleaseIpAddress(string interfaceName)
+    private static async Task ReleaseIpAddressAsync(string interfaceName)
     {
-        var psi = new System.Diagnostics.ProcessStartInfo
+        var psi = new ProcessStartInfo
         {
             FileName = "ipconfig",
-            Arguments = $"release \"{interfaceName}\"",
+            Arguments = $"/release \"{interfaceName}\"",
             UseShellExecute = false,
             CreateNoWindow = true
         };
-        var p = new System.Diagnostics.Process { StartInfo = psi };
 
-        p.Start();
+        using var process = new Process { StartInfo = psi };
+        process.Start();
+        await process.WaitForExitAsync();
     }
 
-    private static void EnableAdapter(string interfaceName)
+    private static async Task EnableAdapterAsync(string interfaceName)
     {
-        var psi = new System.Diagnostics.ProcessStartInfo
+        var psi = new ProcessStartInfo
         {
             FileName = "netsh",
             Arguments = $"interface set interface \"{interfaceName}\" enable",
             UseShellExecute = false,
             CreateNoWindow = true
         };
-        var p = new System.Diagnostics.Process { StartInfo = psi };
 
-        p.Start();
+        using var process = new Process { StartInfo = psi };
+        process.Start();
+        await process.WaitForExitAsync();
     }
 
-    private static void DisableAdapter(string interfaceName)
+    private static async Task DisableAdapterAsync(string interfaceName)
     {
-        var psi = new System.Diagnostics.ProcessStartInfo
+        var psi = new ProcessStartInfo
         {
             FileName = "netsh",
             Arguments = $"interface set interface \"{interfaceName}\" disable",
             UseShellExecute = false,
             CreateNoWindow = true
         };
-        var p = new System.Diagnostics.Process { StartInfo = psi };
-
-        p.Start();
+        
+        using var process = new Process { StartInfo = psi };
+        process.Start();
+        await process.WaitForExitAsync();
     }
 
     public bool IsNetworkAdapterWireless(NetworkAdapter adapter)

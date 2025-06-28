@@ -45,7 +45,7 @@ public partial class MainViewModel : ObservableObject
     public partial bool RestartConnectionOnApplyIsEnabled { get; set; } = true;
 
     [ObservableProperty]
-    public partial bool ReleaseIpAddressIsEnabled { get; set; } = true;   
+    public partial bool ReleaseIpAddressIsEnabled { get; set; } = true;
 
     [RelayCommand]
     private void NetworkAdapterSelected()
@@ -148,7 +148,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ApplyMacAddress()
+    private async Task ApplyMacAddressAsync()
     {
         if (SelectedAdapter is null) 
             return;
@@ -159,7 +159,7 @@ public partial class MainViewModel : ObservableObject
         if (newMacAddress.Length != 12) 
             return;
 
-        bool successful = _networkAdapterService.SetNetworkAdapterMacAddress(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
+        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {
@@ -169,9 +169,18 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RestoreOriginalMacAddress()
+    private async Task RestoreOriginalMacAddressAsync()
     {
+        if (SelectedAdapter is null)
+            return;
+        string newMacAddress = "";
+        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
+        if (successful)
+        {
+            NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
+                           .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+        }
     }
 
     public async Task LoadMacOuiRegistryAsync()
