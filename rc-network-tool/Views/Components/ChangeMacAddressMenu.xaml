@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:rc_network_tool.Models"
              xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="rc_network_tool.Views.Components.ChangeMacAddressMenu"
              x:DataType="viewmodels:MainViewModel">
-    
-    <Border Grid.Row="2" 
+
+    <Border Padding="24,16"
             BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}"
             Shadow="0 2 4 Black 0.28">
 
@@ -14,11 +15,11 @@
             <RoundRectangle CornerRadius="12" />
         </Border.StrokeShape>
 
-        <VerticalStackLayout Padding="16">
+        <VerticalStackLayout Spacing="4">
 
             <Label Text="Change MAC Address" FontSize="Title" Margin="0,0,0,10" />
 
-            <HorizontalStackLayout Spacing="10">
+            <HorizontalStackLayout Spacing="16">
 
                 <Entry x:Name="MacAddressEntry"
                        WidthRequest="250" 
@@ -49,7 +50,7 @@
                         HorizontalOptions="Start" 
                         ItemsSource="{Binding MacOuiRegistry}"
                         SelectedIndex="{Binding SelectedMacOuiVendorIndex}"
-                        ItemDisplayBinding="{Binding Display}">
+                        ItemDisplayBinding="{Binding Display, x:DataType=models:MacOuiRegistrant}">
 
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior

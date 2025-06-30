@@ -5,8 +5,6 @@ using rc_network_tool.Services;
 using rc_network_tool.ViewModels;
 using rc_network_tool.Views;
 
-
-
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml.Media;
@@ -42,6 +40,7 @@ public static class MauiProgram
                 {
                     if (MicaController.IsSupported())
                         window.SystemBackdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
+
                     else if (DesktopAcrylicController.IsSupported())
                         window.SystemBackdrop = new DesktopAcrylicBackdrop();
                 });

@@ -12,7 +12,7 @@
 
     <ScrollView>
 
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Padding="20,10" RowSpacing="10">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Padding="20,10" RowSpacing="16">
 
             <Border Grid.Row="0" 
                     VerticalOptions="Start"
@@ -51,21 +51,21 @@
                         <dg:DataGridColumn 
                             Title="MAC Address"
                             PropertyName="CurrentMacAddress"
-                            Width="150"
+                            Width="180"
                             HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                             CellTemplate="{StaticResource dgCellTemplateLeft}" />
 
                         <dg:DataGridColumn 
                             Title="Speed"
                             PropertyName="Speed"
-                            Width="100"
+                            Width="140"
                             HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
                             CellTemplate="{StaticResource dgCellTemplateRight}" />
 
                         <dg:DataGridColumn 
                             Title="Status"
                             PropertyName="OperationalStatus"
-                            Width="100"
+                            Width="140"
                             HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                             CellTemplate="{StaticResource dgCellTemplateLeft}" />
 

@@ -6,7 +6,8 @@ public interface INetworkAdapterService
 {
     IEnumerable<NetworkAdapter> GetNetworkAdapters();
 
-    public Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, string newMacAddress, bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled);
+    public Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, 
+        string newMacAddress, bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled);
 
     bool IsNetworkAdapterWireless(NetworkAdapter adapter);
 }
