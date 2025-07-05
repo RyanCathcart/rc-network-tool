@@ -183,6 +183,13 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private async Task OnAppearingAsync()
+    {
+        // Load the Mac OUI registry when the view model appears
+        await LoadMacOuiRegistryAsync();
+    }
+
     public async Task LoadMacOuiRegistryAsync()
     {
         IEnumerable<MacOuiRegistrant> macOuiRegistrants = await _macOuiRegistryService.GetRegistrantsAsync();
