@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:rc_network_tool.Models"
-             xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="rc_network_tool.Views.Components.ChangeMacAddressMenu"
-             x:DataType="viewmodels:MainViewModel">
+<ContentView
+    x:Class="rc_network_tool.Views.Components.ChangeMacAddressMenu"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:rc_network_tool.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
+    x:DataType="viewmodels:MainViewModel">
 
-    <Border Padding="24,16"
-            BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}"
-            Shadow="0 2 4 Black 0.28">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Border
+        Padding="24,16"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900},
+                                          Light={StaticResource White}}"
+        Shadow="0 2 4 Black 0.28">
 
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="12" />
@@ -17,59 +26,61 @@
 
         <VerticalStackLayout Spacing="4">
 
-            <Label Text="Change MAC Address" FontSize="Title" Margin="0,0,0,10" />
+            <Label
+                Margin="0,0,0,12"
+                FontSize="Title"
+                Text="Change MAC Address" />
 
             <HorizontalStackLayout Spacing="16">
 
-                <Entry x:Name="MacAddressEntry"
-                       WidthRequest="250" 
-                       Text="{Binding MacAddressEntryText}" 
-                       MaxLength="27" 
-                       TextTransform="Uppercase">
+                <Entry
+                    x:Name="MacAddressEntry"
+                    MaxLength="27"
+                    Text="{Binding MacAddressEntryText}"
+                    TextTransform="Uppercase"
+                    WidthRequest="250">
 
                     <Entry.Behaviors>
                         <toolkit:MaskedBehavior Mask="XX - XX - XX - XX - XX - XX" />
                         <toolkit:EventToCommandBehavior
                             x:TypeArguments="TextChangedEventArgs"
-                            EventName="TextChanged"
+                            BindingContext="{Binding Source={x:Reference MacAddressEntry}, Path=BindingContext}"
                             Command="{Binding MacAddressEntryTextChangedCommand}"
-                            BindingContext="{Binding Source={x:Reference MacAddressEntry}, Path=BindingContext}" />
+                            EventName="TextChanged" />
                     </Entry.Behaviors>
 
                 </Entry>
 
-                <Button Text="Random MAC Address" 
-                        Command="{Binding GenerateRandomMacCommand}" />
+                <Button Command="{Binding GenerateRandomMacCommand}" Text="Random MAC Address" />
 
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout>
-                <Picker x:Name="MacRegistryPicker"
-                        Margin="0,10" 
-                        WidthRequest="425" 
-                        HorizontalOptions="Start" 
-                        ItemsSource="{Binding MacOuiRegistry}"
-                        SelectedIndex="{Binding SelectedMacOuiVendorIndex}"
-                        ItemDisplayBinding="{Binding Display, x:DataType=models:MacOuiRegistrant}">
+            <Picker
+                x:Name="MacRegistryPicker"
+                Margin="0,8,0,0"
+                HorizontalOptions="Start"
+                ItemDisplayBinding="{Binding Display, x:DataType=models:MacOuiRegistrant}"
+                ItemsSource="{Binding MacOuiRegistry}"
+                SelectedIndex="{Binding SelectedMacOuiVendorIndex}"
+                WidthRequest="430">
 
-                    <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="SelectedIndexChanged"
-                            Command="{Binding MacOuiVendorSelectedCommand}"
-                            BindingContext="{Binding Source={x:Reference MacRegistryPicker}, Path=BindingContext}" />
-                    </Picker.Behaviors>
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                        BindingContext="{Binding Source={x:Reference MacRegistryPicker}, Path=BindingContext}"
+                        Command="{Binding MacOuiVendorSelectedCommand}"
+                        EventName="SelectedIndexChanged" />
+                </Picker.Behaviors>
 
-                </Picker>
-            </HorizontalStackLayout>
+            </Picker>
 
             <HorizontalStackLayout>
                 <CheckBox x:Name="Use02AsFirstOctetCheckBox" IsChecked="{Binding Use02AsFirstOctetIsEnabled}">
 
                     <CheckBox.Behaviors>
                         <toolkit:EventToCommandBehavior
-                            EventName="CheckedChanged"
+                            BindingContext="{Binding Source={x:Reference Use02AsFirstOctetCheckBox}, Path=BindingContext}"
                             Command="{Binding Use02AsFirstOctetChangedCommand}"
-                            BindingContext="{Binding Source={x:Reference Use02AsFirstOctetCheckBox}, Path=BindingContext}" />
+                            EventName="CheckedChanged" />
                     </CheckBox.Behaviors>
 
                 </CheckBox>
@@ -86,13 +97,13 @@
                 <Label Text="Release current IP address" VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Apply" Command="{Binding ApplyMacAddressCommand}" />
-                <Button Text="Restore Original" Command="{Binding RestoreOriginalMacAddressCommand}" />
+            <HorizontalStackLayout Spacing="16">
+                <Button Command="{Binding ApplyMacAddressCommand}" Text="Apply" />
+                <Button Command="{Binding RestoreOriginalMacAddressCommand}" Text="Restore Original" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
 
     </Border>
-    
+
 </ContentView>

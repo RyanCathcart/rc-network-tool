@@ -14,11 +14,6 @@ internal class MacOuiRegistryService : IMacOuiRegistryService
         _httpClient = new();
     }
 
-    /// <summary>
-    /// Retrieves the vendor MAC OUI registrants from a local file or downloads it from the web if the local file does not exist.
-    /// </summary>
-    /// <returns></returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "Code readability")]
     public async Task<IEnumerable<MacOuiRegistrant>> GetRegistrantsAsync()
     {
         var filePath = Path.Combine(FileSystem.AppDataDirectory, "mac_oui_registrants.csv");
@@ -32,7 +27,7 @@ internal class MacOuiRegistryService : IMacOuiRegistryService
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-        return csv.GetRecords<MacOuiRegistrant>().ToList();
+        return [.. csv.GetRecords<MacOuiRegistrant>()];
     }
 
     /// <summary>

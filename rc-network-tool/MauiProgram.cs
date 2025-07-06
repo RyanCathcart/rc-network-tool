@@ -28,8 +28,8 @@ public static class MauiProgram
 
         builder.Services.AddTransient<INetworkAdapterService, NetworkAdapterService>();
         builder.Services.AddSingleton<IMacOuiRegistryService, MacOuiRegistryService>();
-        builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddTransient<MainViewModel>();
+        builder.Services.AddTransient<MainPage>();
 
         builder.ConfigureLifecycleEvents(events =>
         {

@@ -37,68 +37,77 @@
                     <RoundRectangle CornerRadius="12" />
                 </Border.StrokeShape>
 
-                <dg:DataGrid
-                    x:Name="NetworkAdapterDataGrid"
-                    ActiveRowColor="{AppThemeBinding Dark={StaticResource Gray600},
-                                                     Light={StaticResource Gray100}}"
-                    BorderThickness="0"
-                    HeaderBackground="{AppThemeBinding Dark={StaticResource PrimaryDark},
-                                                       Light={StaticResource Primary}}"
-                    ItemsSource="{Binding NetworkAdapters}"
-                    RowsBackgroundColorPalette="{AppThemeBinding Dark={StaticResource DgDarkPalette},
-                                                                 Light={StaticResource DgLightPalette}}"
-                    SelectedItem="{Binding SelectedAdapter}"
-                    SelectionMode="Single">
+                <VerticalStackLayout>
 
-                    <dg:DataGrid.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            BindingContext="{Binding Source={x:Reference NetworkAdapterDataGrid}, Path=BindingContext}"
-                            Command="{Binding NetworkAdapterSelectedCommand}"
-                            EventName="ItemSelected" />
-                    </dg:DataGrid.Behaviors>
+                    <Label
+                        Margin="12"
+                        FontSize="Title"
+                        Text="Network Connections" />
 
-                    <dg:DataGrid.Columns>
+                    <dg:DataGrid
+                        x:Name="NetworkAdapterDataGrid"
+                        ActiveRowColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                         Light={StaticResource Gray100}}"
+                        BorderThickness="0"
+                        HeaderBackground="{AppThemeBinding Dark={StaticResource PrimaryDark},
+                                                           Light={StaticResource Primary}}"
+                        ItemsSource="{Binding NetworkAdapters}"
+                        RowsBackgroundColorPalette="{AppThemeBinding Dark={StaticResource DgDarkPalette},
+                                                                     Light={StaticResource DgLightPalette}}"
+                        SelectedItem="{Binding SelectedAdapter}"
+                        SelectionMode="Single">
 
-                        <dg:DataGridColumn
-                            Title="Network Connection"
-                            Width="*"
-                            CellTemplate="{StaticResource dgCellTemplateLeft}"
-                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                            PropertyName="Name" />
+                        <dg:DataGrid.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                BindingContext="{Binding Source={x:Reference NetworkAdapterDataGrid}, Path=BindingContext}"
+                                Command="{Binding NetworkAdapterSelectedCommand}"
+                                EventName="ItemSelected" />
+                        </dg:DataGrid.Behaviors>
 
-                        <dg:DataGridColumn
-                            Title="MAC Address"
-                            Width="180"
-                            CellTemplate="{StaticResource dgCellTemplateLeft}"
-                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                            PropertyName="CurrentMacAddress" />
+                        <dg:DataGrid.Columns>
 
-                        <dg:DataGridColumn
-                            Title="Speed"
-                            Width="140"
-                            CellTemplate="{StaticResource dgCellTemplateRight}"
-                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
-                            PropertyName="Speed" />
+                            <dg:DataGridColumn
+                                Title="Name"
+                                Width="*"
+                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                                PropertyName="Name" />
 
-                        <dg:DataGridColumn
-                            Title="Status"
-                            Width="140"
-                            CellTemplate="{StaticResource dgCellTemplateLeft}"
-                            HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
-                            PropertyName="OperationalStatus" />
+                            <dg:DataGridColumn
+                                Title="MAC Address"
+                                Width="180"
+                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                                PropertyName="CurrentMacAddress" />
 
-                    </dg:DataGrid.Columns>
+                            <dg:DataGridColumn
+                                Title="Speed"
+                                Width="140"
+                                CellTemplate="{StaticResource dgCellTemplateRight}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
+                                PropertyName="Speed" />
 
-                    <dg:DataGrid.NoDataView>
-                        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}">
-                            <Label
-                                HorizontalOptions="Center"
-                                Text="No network adapters found"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </dg:DataGrid.NoDataView>
+                            <dg:DataGridColumn
+                                Title="Status"
+                                Width="140"
+                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                                PropertyName="OperationalStatus" />
 
-                </dg:DataGrid>
+                        </dg:DataGrid.Columns>
+
+                        <dg:DataGrid.NoDataView>
+                            <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}">
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="No network adapters found"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </dg:DataGrid.NoDataView>
+
+                    </dg:DataGrid>
+
+                </VerticalStackLayout>
 
             </Border>
 
