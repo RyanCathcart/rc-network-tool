@@ -47,6 +47,12 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ReleaseIpAddressIsEnabled { get; set; } = true;
 
+    [ObservableProperty]
+    public partial bool ApplyButtonIsEnabled { get; set; }
+
+    [ObservableProperty]
+    public partial bool RestoreButtonIsEnabled { get; set; }
+
     [RelayCommand]
     private void NetworkAdapterSelected()
     {

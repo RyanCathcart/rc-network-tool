@@ -35,7 +35,9 @@
 
                 <Entry
                     x:Name="MacAddressEntry"
+                    ClearButtonVisibility="WhileEditing"
                     MaxLength="27"
+                    Placeholder="Enter new MAC address"
                     Text="{Binding MacAddressEntryText}"
                     TextTransform="Uppercase"
                     WidthRequest="250">
@@ -98,8 +100,14 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Spacing="16">
-                <Button Command="{Binding ApplyMacAddressCommand}" Text="Apply" />
-                <Button Command="{Binding RestoreOriginalMacAddressCommand}" Text="Restore Original" />
+                <Button
+                    Command="{Binding ApplyMacAddressCommand}"
+                    IsEnabled="{Binding ApplyButtonIsEnabled}"
+                    Text="Apply" />
+                <Button
+                    Command="{Binding RestoreOriginalMacAddressCommand}"
+                    IsEnabled="{Binding RestoreButtonIsEnabled}"
+                    Text="Restore Original" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
