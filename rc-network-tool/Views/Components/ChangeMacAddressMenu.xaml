@@ -8,12 +8,6 @@
     xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
     x:DataType="viewmodels:MainViewModel">
 
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
-        </ResourceDictionary>
-    </ContentView.Resources>
-
     <Border
         Padding="24,16"
         BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900},

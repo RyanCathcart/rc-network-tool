@@ -39,10 +39,21 @@
 
                 <VerticalStackLayout>
 
-                    <Label
-                        Margin="12"
-                        FontSize="Title"
-                        Text="Network Connections" />
+                    <HorizontalStackLayout>
+
+                        <Label
+                            Margin="12"
+                            FontSize="Title"
+                            Text="Network Connections" />
+
+                        <ImageButton
+                            Padding="2"
+                            BorderWidth="1"
+                            Command="{Binding RefreshNetworkAdapterDataGridCommand}"
+                            HeightRequest="24"
+                            Source="refresh_icon.png" />
+
+                    </HorizontalStackLayout>
 
                     <dg:DataGrid
                         x:Name="NetworkAdapterDataGrid"

@@ -16,11 +16,7 @@ public partial class MainViewModel : ObservableObject
         _networkAdapterService = networkAdapterService;
         _macOuiRegistryService = macOuiRegistryService;
 
-        IEnumerable<NetworkAdapter> networkAdapters = _networkAdapterService.GetNetworkAdapters();
-        NetworkAdapters.AddRange(networkAdapters);
-
-        if (NetworkAdapters.Count > 0)
-            SelectedAdapter = NetworkAdapters[0];
+        RefreshNetworkAdapterDataGrid();
     }
 
     [ObservableProperty]
@@ -52,6 +48,16 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public partial bool RestoreButtonIsEnabled { get; set; }
+
+    [RelayCommand]
+    private void RefreshNetworkAdapterDataGrid()
+    {
+        IEnumerable<NetworkAdapter> networkAdapters = _networkAdapterService.GetNetworkAdapters();
+        NetworkAdapters = new ObservableRangeCollection<NetworkAdapter>(networkAdapters);
+
+        if (NetworkAdapters.Count > 0)
+            SelectedAdapter = NetworkAdapters[0];
+    }
 
     [RelayCommand]
     private void NetworkAdapterSelected()
