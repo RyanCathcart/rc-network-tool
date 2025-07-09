@@ -65,6 +65,7 @@ public partial class MainViewModel : ObservableObject
         if (SelectedAdapter is null) return;
 
         Use02AsFirstOctetIsEnabled = _networkAdapterService.IsNetworkAdapterWireless(SelectedAdapter);
+        RestoreButtonIsEnabled = SelectedAdapter.IsMacChanged;
     }
 
     [RelayCommand]
@@ -150,6 +151,8 @@ public partial class MainViewModel : ObservableObject
             }
         }
 
+        ApplyButtonIsEnabled = macAddress.Length == 12;
+
         // Update the OUI Vendor picker to be empty if the OUI portion of the Mac Address does not match the selected vendor
         if (SelectedMacOuiVendorIndex < 0) return;
 
@@ -168,15 +171,13 @@ public partial class MainViewModel : ObservableObject
         // Validate MacAddressEntryText
         string newMacAddress = MacAddressEntryText.Replace(" ", "").Replace("-", "");
 
-        if (newMacAddress.Length != 12) 
-            return;
-
         bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {
             NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
                            .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+            RestoreButtonIsEnabled = true;
         }
     }
 
@@ -185,13 +186,16 @@ public partial class MainViewModel : ObservableObject
     {
         if (SelectedAdapter is null)
             return;
+
+        RestoreButtonIsEnabled = false;
+
         string newMacAddress = "";
         bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {
             NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
-                           .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+                           .FirstOrDefault()?.CurrentMacAddress = SelectedAdapter.OriginalMacAddress;
         }
     }
 

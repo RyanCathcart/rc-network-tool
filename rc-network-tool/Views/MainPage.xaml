@@ -23,7 +23,7 @@
 
         <Grid
             Padding="20,10"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto"
             RowSpacing="16">
 
             <Border
@@ -83,6 +83,13 @@
                                 CellTemplate="{StaticResource dgCellTemplateLeft}"
                                 HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                                 PropertyName="Name" />
+
+                            <dg:DataGridColumn
+                                Title="Changed"
+                                Width="120"
+                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                                PropertyName="IsMacChanged" />
 
                             <dg:DataGridColumn
                                 Title="MAC Address"

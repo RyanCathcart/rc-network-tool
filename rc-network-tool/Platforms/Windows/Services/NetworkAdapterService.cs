@@ -8,7 +8,8 @@ namespace rc_network_tool.Services;
 internal class NetworkAdapterService : INetworkAdapterService
 {
     const string REGISTRY_BASE_KEY = @"SYSTEM\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}";
-    const string REGISTRY_VALUE_MAC_ADDRESS = "NetworkAddress";
+    const string REGISTRY_VALUE_MAC = "NetworkAddress";
+    const string REGISTRY_VALUE_ORIG_MAC = "OriginalNetworkAddress";
 
     public IEnumerable<NetworkAdapter> GetNetworkAdapters()
     {
@@ -38,8 +39,8 @@ internal class NetworkAdapterService : INetworkAdapterService
             var name = networkInterface?.Name ?? string.Empty;
             var description = subKey.GetValue("DriverDesc")?.ToString();
             var hardwareId = subKey.GetValue("ComponentId")?.ToString();
-            var originalMacAddress = NetworkAdapter.ConvertMacAddressToString(subKey.GetValue("OriginalNetworkAddress")?.ToString() ?? string.Empty);
-            var currentMacAddress = NetworkAdapter.ConvertMacAddressToString(subKey.GetValue(REGISTRY_VALUE_MAC_ADDRESS)?.ToString());
+            var currentMacAddress = NetworkAdapter.ConvertMacAddressToString(subKey.GetValue(REGISTRY_VALUE_MAC)?.ToString() ?? networkInterface?.GetPhysicalAddress().ToString());
+            var originalMacAddress = NetworkAdapter.ConvertMacAddressToString(subKey.GetValue(REGISTRY_VALUE_ORIG_MAC)?.ToString() ?? currentMacAddress);
             if (string.IsNullOrEmpty(currentMacAddress))
                 currentMacAddress = originalMacAddress;
             var speed = networkInterface?.Speed;
@@ -64,22 +65,23 @@ internal class NetworkAdapterService : INetworkAdapterService
         return networkAdapters;
     }
 
-    public async Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, string newMacAddress, bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled)
+    public async Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, string newMacAddress, 
+        bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled)
     {
         if (adapter is null) 
             return false;
 
-        using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_BASE_KEY, true); // Cannot write to registry without admin privileges
+        using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_BASE_KEY, writable: true); // Cannot write to registry without admin privileges
 
         if (registryKey is null) 
             return false;
 
         foreach (string subKeyName in registryKey.GetSubKeyNames())
         {
-            if (int.TryParse(subKeyName, out _) == false)
+            if (!int.TryParse(subKeyName, out _))
                 continue;
 
-            using RegistryKey? subKey = registryKey.OpenSubKey(subKeyName, true);
+            using RegistryKey? subKey = registryKey.OpenSubKey(subKeyName, writable: true);
 
             if (subKey is null) 
                 continue;
@@ -89,7 +91,21 @@ internal class NetworkAdapterService : INetworkAdapterService
             if (id != adapter.Id) 
                 continue;
 
-            subKey.SetValue(REGISTRY_VALUE_MAC_ADDRESS, newMacAddress, RegistryValueKind.String);
+            if (adapter.CurrentMacAddress is null)
+                return false;
+
+            if (string.IsNullOrEmpty(newMacAddress))
+            {
+                subKey.DeleteValue(REGISTRY_VALUE_MAC);
+                subKey.DeleteValue(REGISTRY_VALUE_ORIG_MAC);
+            }
+            else
+            {
+                if (subKey.GetValue(REGISTRY_VALUE_ORIG_MAC) is null)
+                    subKey.SetValue(REGISTRY_VALUE_ORIG_MAC, adapter.CurrentMacAddress, RegistryValueKind.String);
+
+                subKey.SetValue(REGISTRY_VALUE_MAC, newMacAddress, RegistryValueKind.String);
+            }
 
             if (restartAdapterIsEnabled && adapter.Name is not null)
             {

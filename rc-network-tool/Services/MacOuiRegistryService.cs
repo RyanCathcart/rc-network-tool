@@ -41,7 +41,7 @@ internal class MacOuiRegistryService : IMacOuiRegistryService
 
         try
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(URL);
+            using HttpResponseMessage response = await _httpClient.GetAsync(URL);
 
             if (!response.IsSuccessStatusCode)
             {

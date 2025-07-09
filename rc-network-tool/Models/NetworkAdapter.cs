@@ -12,7 +12,7 @@ public partial class NetworkAdapter : ObservableObject
 
     [ObservableProperty]
     public partial string? CurrentMacAddress { get; set; }
-    public bool IsMacChanged => CurrentMacAddress == OriginalMacAddress;
+    public bool IsMacChanged => CurrentMacAddress != OriginalMacAddress;
     public long? Speed { get; set; }
     public string? OperationalStatus { get; set; }
 
