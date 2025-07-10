@@ -168,6 +168,8 @@ public partial class MainViewModel : ObservableObject
         if (SelectedAdapter is null) 
             return;
 
+        ApplyButtonIsEnabled = false;
+
         // Validate MacAddressEntryText
         string newMacAddress = MacAddressEntryText.Replace(" ", "").Replace("-", "");
 
@@ -175,10 +177,15 @@ public partial class MainViewModel : ObservableObject
 
         if (successful)
         {
-            NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
-                           .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+            var networkAdapter = NetworkAdapters.FirstOrDefault(n => n.Id == SelectedAdapter.Id);
+            networkAdapter?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
+            networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
+            //NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
+            //               .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
             RestoreButtonIsEnabled = true;
         }
+
+        ApplyButtonIsEnabled = true;
     }
 
     [RelayCommand]
@@ -194,8 +201,11 @@ public partial class MainViewModel : ObservableObject
 
         if (successful)
         {
-            NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
-                           .FirstOrDefault()?.CurrentMacAddress = SelectedAdapter.OriginalMacAddress;
+            var networkAdapter = NetworkAdapters.FirstOrDefault(n => n.Id == SelectedAdapter.Id);
+            networkAdapter?.CurrentMacAddress = networkAdapter.OriginalMacAddress;
+            networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
+            //NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
+            //               .FirstOrDefault()?.CurrentMacAddress = SelectedAdapter.OriginalMacAddress;
         }
     }
 

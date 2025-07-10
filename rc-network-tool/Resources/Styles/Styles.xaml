@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
-<ResourceDictionary 
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:rc_network_tool.Models"
     xmlns:converters="clr-namespace:rc_network_tool.Utils.Converters"
-    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid">
+    xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+    xmlns:models="clr-namespace:rc_network_tool.Models">
 
-<!--Default .NET MAUI Styles 
+    <!--Default .NET MAUI Styles
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
     </Style>
@@ -77,12 +77,11 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
-    </Style>
--->
+    </Style>-->
     <Style TargetType="CheckBox">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
-        <Setter Property="MinimumHeightRequest" Value="44"/>
-        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -96,7 +95,7 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-<!--
+    <!--
     <Style TargetType="DatePicker">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -426,8 +425,8 @@
     <Style TargetType="dg:DataGrid">
         <Setter Property="HeaderBackground" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
     </Style>
-  
-    
+
+
     <Style TargetType="TitleBar">
         <Setter Property="MinimumHeightRequest" Value="32"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -449,7 +448,7 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
+
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
@@ -480,12 +479,11 @@
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-    </Style>
--->
-    
-    <!--Styles for akgul.Maui.DataGrid controls-->
-    
-    <Style TargetType="Label" x:Key="dgHeaderLabelStyleLeft">
+    </Style>-->
+
+    <!--  Styles for akgul.Maui.DataGrid controls  -->
+
+    <Style x:Key="dgHeaderLabelStyleLeft" TargetType="Label">
         <Setter Property="HorizontalTextAlignment" Value="Start" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="Padding" Value="24, 0" />
@@ -494,7 +492,7 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Dark=Black, Light=White}" />
     </Style>
 
-    <Style TargetType="Label" x:Key="dgHeaderLabelStyleCenter">
+    <Style x:Key="dgHeaderLabelStyleCenter" TargetType="Label">
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="Padding" Value="24, 0" />
@@ -503,7 +501,7 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Dark=Black, Light=White}" />
     </Style>
 
-    <Style TargetType="Label" x:Key="dgHeaderLabelStyleRight">
+    <Style x:Key="dgHeaderLabelStyleRight" TargetType="Label">
         <Setter Property="HorizontalTextAlignment" Value="End" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="Padding" Value="24, 0" />
@@ -511,45 +509,103 @@
         <Setter Property="LineBreakMode" Value="TailTruncation" />
         <Setter Property="TextColor" Value="{AppThemeBinding Dark=Black, Light=White}" />
     </Style>
-    
+
 
     <converters:AdapterSpeedLongToStringConverter x:Key="AdapterSpeedLongToStringConverter" />
+    <converters:IsMacChangedBoolToStringConverter x:Key="IsMacChangedBoolToStringConverter" />
 
-    
-    <DataTemplate x:DataType="x:String" x:Key="dgCellTemplateLeft">
+    <DataTemplate x:Key="DgCellTemplateName" x:DataType="x:String">
         <Grid RowDefinitions="*,Auto">
-            <Label Text="{Binding .}" FontSize="13"
-                   LineBreakMode="TailTruncation"
-                   Padding="24,0"
-                   HorizontalTextAlignment="Start" 
-                   VerticalTextAlignment="Center"
-                   VerticalOptions="Fill"/>
-            <BoxView Grid.Row="1" BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600}, Light={StaticResource Gray100}}" HeightRequest="1" HorizontalOptions="Fill" />
+            <Label
+                Padding="24,0"
+                FontSize="13"
+                HorizontalTextAlignment="Start"
+                LineBreakMode="TailTruncation"
+                Text="{Binding .}"
+                VerticalOptions="Fill"
+                VerticalTextAlignment="Center" />
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                  Light={StaticResource Gray100}}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:DataType="x:String" x:Key="dgCellTemplateCenter">
+    <DataTemplate x:Key="DgCellTemplateChanged" x:DataType="x:Boolean">
         <Grid RowDefinitions="*,Auto">
-            <Label Text="{Binding .}" FontSize="13"
-                   LineBreakMode="TailTruncation"
-                   Padding="24,0"
-                   HorizontalTextAlignment="Center" 
-                   VerticalTextAlignment="Center"
-                   VerticalOptions="Fill"/>
-            <BoxView Grid.Row="1" BackgroundColor="{StaticResource Gray600}" HeightRequest="1" HorizontalOptions="Fill" />
+            <Label
+                Padding="24,0"
+                FontSize="13"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="TailTruncation"
+                Text="{Binding ., Converter={StaticResource IsMacChangedBoolToStringConverter}}"
+                VerticalOptions="Fill"
+                VerticalTextAlignment="Center" />
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                  Light={StaticResource Gray100}}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:DataType="x:Int64" x:Key="dgCellTemplateRight">
+    <DataTemplate x:Key="DgCellTemplateMacAddress" x:DataType="x:String">
         <Grid RowDefinitions="*,Auto">
-            <Label Text="{Binding ., Converter={StaticResource AdapterSpeedLongToStringConverter}}" 
-                   FontSize="13"
-                   LineBreakMode="TailTruncation"
-                   Padding="24,0"
-                   HorizontalTextAlignment="End" 
-                   VerticalTextAlignment="Center"
-                   VerticalOptions="Fill"/>
-            <BoxView Grid.Row="1" BackgroundColor="{StaticResource Gray600}" HeightRequest="1" HorizontalOptions="Fill" />
+            <Label
+                Padding="24,0"
+                FontSize="13"
+                HorizontalTextAlignment="Start"
+                LineBreakMode="TailTruncation"
+                Text="{Binding .}"
+                VerticalOptions="Fill"
+                VerticalTextAlignment="Center" />
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                  Light={StaticResource Gray100}}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DgCellTemplateSpeed" x:DataType="x:Int64">
+        <Grid RowDefinitions="*,Auto">
+            <Label
+                Padding="24,0"
+                FontSize="13"
+                HorizontalTextAlignment="End"
+                LineBreakMode="TailTruncation"
+                Text="{Binding ., Converter={StaticResource AdapterSpeedLongToStringConverter}}"
+                VerticalOptions="Fill"
+                VerticalTextAlignment="Center" />
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                  Light={StaticResource Gray100}}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DgCellTemplateStatus" x:DataType="x:String">
+        <Grid RowDefinitions="*,Auto">
+            <Label
+                Padding="24,0"
+                FontSize="13"
+                HorizontalTextAlignment="Start"
+                LineBreakMode="TailTruncation"
+                Text="{Binding .}"
+                VerticalOptions="Fill"
+                VerticalTextAlignment="Center" />
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource Gray600},
+                                                  Light={StaticResource Gray100}}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
         </Grid>
     </DataTemplate>
 

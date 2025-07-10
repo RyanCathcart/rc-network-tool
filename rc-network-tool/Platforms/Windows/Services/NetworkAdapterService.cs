@@ -43,6 +43,7 @@ internal class NetworkAdapterService : INetworkAdapterService
             var originalMacAddress = NetworkAdapter.ConvertMacAddressToString(subKey.GetValue(REGISTRY_VALUE_ORIG_MAC)?.ToString() ?? currentMacAddress);
             if (string.IsNullOrEmpty(currentMacAddress))
                 currentMacAddress = originalMacAddress;
+            var isMacChanged = currentMacAddress != originalMacAddress;
             var speed = networkInterface?.Speed;
             var operationalStatus = networkInterface?.OperationalStatus.ToString() ?? string.Empty;
 
@@ -56,6 +57,7 @@ internal class NetworkAdapterService : INetworkAdapterService
                     HardwareId = hardwareId,
                     OriginalMacAddress = originalMacAddress,
                     CurrentMacAddress = currentMacAddress,
+                    IsMacChanged = isMacChanged,
                     Speed = speed,
                     OperationalStatus = operationalStatus
                 });

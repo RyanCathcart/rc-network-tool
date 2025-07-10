@@ -80,35 +80,35 @@
                             <dg:DataGridColumn
                                 Title="Name"
                                 Width="*"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                CellTemplate="{StaticResource DgCellTemplateName}"
                                 HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                                 PropertyName="Name" />
 
                             <dg:DataGridColumn
                                 Title="Changed"
                                 Width="120"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}"
-                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
+                                CellTemplate="{StaticResource DgCellTemplateChanged}"
+                                HeaderLabelStyle="{StaticResource dgHeaderLabelStyleCenter}"
                                 PropertyName="IsMacChanged" />
 
                             <dg:DataGridColumn
                                 Title="MAC Address"
                                 Width="180"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                CellTemplate="{StaticResource DgCellTemplateMacAddress}"
                                 HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                                 PropertyName="CurrentMacAddress" />
 
                             <dg:DataGridColumn
                                 Title="Speed"
                                 Width="140"
-                                CellTemplate="{StaticResource dgCellTemplateRight}"
+                                CellTemplate="{StaticResource DgCellTemplateSpeed}"
                                 HeaderLabelStyle="{StaticResource dgHeaderLabelStyleRight}"
                                 PropertyName="Speed" />
 
                             <dg:DataGridColumn
                                 Title="Status"
                                 Width="140"
-                                CellTemplate="{StaticResource dgCellTemplateLeft}"
+                                CellTemplate="{StaticResource DgCellTemplateStatus}"
                                 HeaderLabelStyle="{StaticResource dgHeaderLabelStyleLeft}"
                                 PropertyName="OperationalStatus" />
 
