@@ -7,4 +7,5 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0130:Namespace does not match folder structure", 
     Justification = "Platform-specific implementations for services need to all be a part of the same namespace.", 
-    Scope = "namespace", Target = "~N:rc_network_tool.Services")]
+    Scope = "namespace", 
+    Target = "~N:rc_network_tool.Services")]

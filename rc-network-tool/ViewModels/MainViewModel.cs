@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using rc_network_tool.Models;
 using rc_network_tool.Services;
@@ -10,13 +12,13 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly INetworkAdapterService _networkAdapterService;
     private readonly IMacOuiRegistryService _macOuiRegistryService;
+    private readonly IAlertService _alertService;
 
-    public MainViewModel(INetworkAdapterService networkAdapterService, IMacOuiRegistryService macOuiRegistryService)
+    public MainViewModel(INetworkAdapterService networkAdapterService, IMacOuiRegistryService macOuiRegistryService, IAlertService alertService)
     {
         _networkAdapterService = networkAdapterService;
         _macOuiRegistryService = macOuiRegistryService;
-
-        RefreshNetworkAdapterDataGrid();
+        _alertService = alertService;
     }
 
     [ObservableProperty]
@@ -36,7 +38,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public partial bool Use02AsFirstOctetIsEnabled { get; set; } = false;
-    
+
     [ObservableProperty]
     public partial bool RestartConnectionOnApplyIsEnabled { get; set; } = true;
 
@@ -48,6 +50,20 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public partial bool RestoreButtonIsEnabled { get; set; }
+
+    [RelayCommand]
+    private async Task OnAppearingAsync()
+    {
+        RefreshNetworkAdapterDataGrid();
+        await LoadMacOuiRegistryAsync();
+    }
+
+    private async Task LoadMacOuiRegistryAsync()
+    {
+        IEnumerable<MacOuiRegistrant> macOuiRegistrants = await _macOuiRegistryService.GetRegistrantsAsync();
+
+        MacOuiRegistry.AddRange(macOuiRegistrants);
+    }
 
     [RelayCommand]
     private void RefreshNetworkAdapterDataGrid()
@@ -133,7 +149,7 @@ public partial class MainViewModel : ObservableObject
                 MacAddressEntryText = "00";
             else
                 MacAddressEntryText = "00" + MacAddressEntryText[2..];
-        } 
+        }
     }
 
     [RelayCommand]
@@ -165,7 +181,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task ApplyMacAddressAsync()
     {
-        if (SelectedAdapter is null) 
+        if (SelectedAdapter is null)
             return;
 
         ApplyButtonIsEnabled = false;
@@ -173,16 +189,16 @@ public partial class MainViewModel : ObservableObject
         // Validate MacAddressEntryText
         string newMacAddress = MacAddressEntryText.Replace(" ", "").Replace("-", "");
 
-        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
+        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(
+            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {
             var networkAdapter = NetworkAdapters.FirstOrDefault(n => n.Id == SelectedAdapter.Id);
             networkAdapter?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
             networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
-            //NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
-            //               .FirstOrDefault()?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
-            RestoreButtonIsEnabled = true;
+
+            await _alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address changed successfully");
         }
 
         ApplyButtonIsEnabled = true;
@@ -197,29 +213,16 @@ public partial class MainViewModel : ObservableObject
         RestoreButtonIsEnabled = false;
 
         string newMacAddress = "";
-        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
+        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(
+            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
 
         if (successful)
         {
             var networkAdapter = NetworkAdapters.FirstOrDefault(n => n.Id == SelectedAdapter.Id);
             networkAdapter?.CurrentMacAddress = networkAdapter.OriginalMacAddress;
             networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
-            //NetworkAdapters.Where(n => n.Id == SelectedAdapter.Id)
-            //               .FirstOrDefault()?.CurrentMacAddress = SelectedAdapter.OriginalMacAddress;
+
+            await _alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address restored successfully");
         }
-    }
-
-    [RelayCommand]
-    private async Task OnAppearingAsync()
-    {
-        // Load the Mac OUI registry when the view model appears
-        await LoadMacOuiRegistryAsync().ConfigureAwait(false);
-    }
-
-    private async Task LoadMacOuiRegistryAsync()
-    {
-        IEnumerable<MacOuiRegistrant> macOuiRegistrants = await _macOuiRegistryService.GetRegistrantsAsync();
-
-        MacOuiRegistry.AddRange(macOuiRegistrants);
-    }
+    }    
 }

@@ -4,6 +4,8 @@ using Microsoft.Maui.LifecycleEvents;
 using rc_network_tool.Services;
 using rc_network_tool.ViewModels;
 using rc_network_tool.Views;
+using Microsoft.Maui.Controls.Shapes;
+
 
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -19,17 +21,15 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(static options =>
+            {
+                options.SetShouldEnableSnackbarOnWindows(true);
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-
-        builder.Services.AddTransient<INetworkAdapterService, NetworkAdapterService>();
-        builder.Services.AddSingleton<IMacOuiRegistryService, MacOuiRegistryService>();
-        builder.Services.AddTransient<MainViewModel>();
-        builder.Services.AddTransient<MainPage>();
 
         builder.ConfigureLifecycleEvents(events =>
         {
@@ -47,6 +47,12 @@ public static class MauiProgram
             });
 #endif
         });
+
+        // Register services
+        builder.Services.AddTransient<IAlertService, AlertService>();
+        builder.Services.AddTransient<INetworkAdapterService, NetworkAdapterService>();
+        builder.Services.AddSingleton<IMacOuiRegistryService, MacOuiRegistryService>();
+        builder.Services.AddTransientWithShellRoute<MainPage, MainViewModel>(nameof(MainPage));
 
 #if DEBUG
         builder.Logging.AddDebug();

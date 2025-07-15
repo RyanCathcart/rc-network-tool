@@ -22,7 +22,7 @@
     <ScrollView>
 
         <Grid
-            Padding="20,10"
+            Padding="24,8"
             RowDefinitions="Auto,Auto,Auto"
             RowSpacing="16">
 
@@ -42,7 +42,7 @@
                     <HorizontalStackLayout>
 
                         <Label
-                            Margin="12"
+                            Margin="24,16,24,12"
                             FontSize="Title"
                             Text="Network Connections" />
 

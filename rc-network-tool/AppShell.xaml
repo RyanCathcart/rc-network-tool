@@ -4,9 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:rc_network_tool.Views"
-    Shell.FlyoutBehavior="Flyout"
-    FlyoutBackgroundColor="Transparent"
-    Title="RC Network Tool">
+    
+    FlyoutBackgroundColor="Transparent">
 
     <ShellContent
         Title="Main Page"
