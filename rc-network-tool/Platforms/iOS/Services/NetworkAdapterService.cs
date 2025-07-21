@@ -13,4 +13,9 @@ internal class NetworkAdapterService : INetworkAdapterService
     {
         throw new NotImplementedException();
     }
+
+    public Task<bool> SetNetworkAdapterMacAddressAsync(NetworkAdapter adapter, string newMacAddress, bool restartAdapterIsEnabled, bool releaseIpAddressIsEnabled)
+    {
+        throw new NotImplementedException();
+    }
 }

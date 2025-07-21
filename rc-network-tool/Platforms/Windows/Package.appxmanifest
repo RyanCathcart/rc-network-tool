@@ -42,7 +42,7 @@
 
 		<!-- Specify which CLSID to activate when notification is clicked -->
 		<desktop:Extension Category="windows.toastNotificationActivation">
-		  <desktop:ToastNotificationActivation ToastActivatorCLSID="6e919706-2634-4d97-a93c-2213b2acc334" />
+		  <desktop:ToastNotificationActivation ToastActivatorCLSID="71f2a981-2bb5-47ec-afbe-b0d6f4d99ba5" />
 		</desktop:Extension>
 
 		<!-- Register COM CLSID -->
@@ -50,7 +50,7 @@
 		  <com:ComServer>
 			<com:ExeServer Executable="rc-network-tool\rc-network-tool.exe" DisplayName="$targetnametoken$" Arguments="----AppNotificationActivated:">
 			  <!-- Example path to executable: CommunityToolkit.Maui.Sample\CommunityToolkit.Maui.Sample.exe -->
-			  <com:Class Id="6e919706-2634-4d97-a93c-2213b2acc334" />
+			  <com:Class Id="71f2a981-2bb5-47ec-afbe-b0d6f4d99ba5" />
 			</com:ExeServer>
 		  </com:ComServer>
 		</com:Extension>

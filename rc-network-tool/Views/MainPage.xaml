@@ -14,7 +14,7 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=ContentPage}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
@@ -70,7 +70,7 @@
 
                         <dg:DataGrid.Behaviors>
                             <toolkit:EventToCommandBehavior
-                                BindingContext="{Binding Source={x:Reference NetworkAdapterDataGrid}, Path=BindingContext}"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference NetworkAdapterDataGrid}, x:DataType=dg:DataGrid}"
                                 Command="{Binding NetworkAdapterSelectedCommand}"
                                 EventName="ItemSelected" />
                         </dg:DataGrid.Behaviors>

@@ -4,8 +4,6 @@ using Microsoft.Maui.LifecycleEvents;
 using rc_network_tool.Services;
 using rc_network_tool.ViewModels;
 using rc_network_tool.Views;
-using Microsoft.Maui.Controls.Shapes;
-
 
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Microsoft.UI.Composition.SystemBackdrops;

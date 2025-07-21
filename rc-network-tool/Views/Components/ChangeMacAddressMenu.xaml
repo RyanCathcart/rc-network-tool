@@ -40,7 +40,7 @@
                         <toolkit:MaskedBehavior Mask="XX - XX - XX - XX - XX - XX" />
                         <toolkit:EventToCommandBehavior
                             x:TypeArguments="TextChangedEventArgs"
-                            BindingContext="{Binding Source={x:Reference MacAddressEntry}, Path=BindingContext}"
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference MacAddressEntry}, x:DataType=Entry}"
                             Command="{Binding MacAddressEntryTextChangedCommand}"
                             EventName="TextChanged" />
                     </Entry.Behaviors>
@@ -62,7 +62,7 @@
 
                 <Picker.Behaviors>
                     <toolkit:EventToCommandBehavior
-                        BindingContext="{Binding Source={x:Reference MacRegistryPicker}, Path=BindingContext}"
+                        BindingContext="{Binding Path=BindingContext, Source={x:Reference MacRegistryPicker}, x:DataType=Picker}"
                         Command="{Binding MacOuiVendorSelectedCommand}"
                         EventName="SelectedIndexChanged" />
                 </Picker.Behaviors>
@@ -74,7 +74,7 @@
 
                     <CheckBox.Behaviors>
                         <toolkit:EventToCommandBehavior
-                            BindingContext="{Binding Source={x:Reference Use02AsFirstOctetCheckBox}, Path=BindingContext}"
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference Use02AsFirstOctetCheckBox}, x:DataType=CheckBox}"
                             Command="{Binding Use02AsFirstOctetChangedCommand}"
                             EventName="CheckedChanged" />
                     </CheckBox.Behaviors>
