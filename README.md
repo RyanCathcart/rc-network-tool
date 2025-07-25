@@ -1,9 +1,8 @@
 # RC Network Tool
 
+<h2>What is it?</h2> 
 <img src="./rc-network-tool/Resources/AppIcon/ntappicon.svg" 
     align="right" height="140" alt="RC Network Tool logo">
-
-## What is it?
 
 RC Network tool is a .NET MAUI-based network utility designed to manage and change MAC addresses for network adapters on Windows machines.
 
