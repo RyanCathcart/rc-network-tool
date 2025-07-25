@@ -1,45 +1,159 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
-             x:Class="rc_network_tool.Views.Components.ConnectionDetailsView"
-             x:DataType="viewmodels:MainViewModel">
+<ContentView
+    x:Class="rc_network_tool.Views.Components.ConnectionDetailsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:viewmodels="clr-namespace:rc_network_tool.ViewModels"
+    x:DataType="viewmodels:MainViewModel">
 
-    <Border Padding="24,16" 
-            BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource White}}"
-            Shadow="0 2 4 Black 0.28">
+    <Border
+        Padding="24,16"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource Gray900},
+                                          Light={StaticResource White}}"
+        Shadow="0 2 4 Black 0.28">
 
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="12" />
         </Border.StrokeShape>
 
-        <VerticalStackLayout Spacing="4">
+        <Grid ColumnDefinitions="Auto,*">
 
-            <Label Text="Connection Details" FontSize="Title" Margin="0,0,0,10" />
+            <VerticalStackLayout
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Padding="0,0,12,0"
+                MinimumWidthRequest="420"
+                Spacing="4">
 
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="20">
+                <Label
+                    Margin="0,0,0,10"
+                    FontSize="Title"
+                    Text="Connection Details" />
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Connection Name:" />
-                <Label Grid.Row="0" Grid.Column="1" Text="{Binding SelectedAdapter.Name}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                <Grid
+                    ColumnDefinitions="Auto,Auto"
+                    ColumnSpacing="20"
+                    RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                    RowSpacing="12">
 
-                <Label Grid.Row="1" Grid.Column="0" Text="Device:" />
-                <Label Grid.Row="1" Grid.Column="1" Text="{Binding SelectedAdapter.Description}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Connection Name:" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.Name}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
 
-                <Label Grid.Row="2" Grid.Column="0" Text="Hardware ID:" />
-                <Label Grid.Row="2" Grid.Column="1" Text="{Binding SelectedAdapter.HardwareId}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Device:" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.Description}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
 
-                <Label Grid.Row="3" Grid.Column="0" Text="Config ID:" />
-                <Label Grid.Row="3" Grid.Column="1" Text="{Binding SelectedAdapter.Id}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Hardware ID:" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.HardwareId}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
 
-                <Label Grid.Row="4" Grid.Column="0" Text="Original MAC Address:" />
-                <Label Grid.Row="4" Grid.Column="1" Text="{Binding SelectedAdapter.OriginalMacAddress}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="Config ID:" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.Id}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
 
-                <Label Grid.Row="5" Grid.Column="0" Text="Current MAC Address:" />
-                <Label Grid.Row="5" Grid.Column="1" Text="{Binding SelectedAdapter.CurrentMacAddress}" TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="Original MAC Address:" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.OriginalMacAddress}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Text="Current MAC Address:" />
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Text="{Binding SelectedAdapter.CurrentMacAddress}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Gray100}}" />
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+            <Grid Grid.Column="1" RowDefinitions="*,Auto">
+
+                <lvc:CartesianChart
+                    x:Name="networkSpeedChart"
+                    Grid.Row="0"
+                    EasingFunction="{x:Null}"
+                    Series="{Binding Series}"
+                    XAxes="{Binding XAxes}"
+                    YAxes="{Binding YAxes}" />
+
+                <HorizontalStackLayout
+                    Grid.Row="1"
+                    HorizontalOptions="Center"
+                    Spacing="48">
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Ellipse
+                            Margin="0,0"
+                            Fill="{StaticResource PrimaryDark}"
+                            HeightRequest="20"
+                            WidthRequest="20" />
+                        <Label
+                            FontSize="Micro"
+                            Text="Sent - "
+                            VerticalTextAlignment="Center" />
+                        <Label
+                            FontSize="Micro"
+                            Text="{Binding SentSpeed, Converter={StaticResource AdapterSpeedLongToStringConverter}}"
+                            VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Ellipse
+                            Margin="0,0"
+                            Fill="SteelBlue"
+                            HeightRequest="20"
+                            WidthRequest="20" />
+                        <Label
+                            FontSize="Micro"
+                            Text="Received - "
+                            VerticalTextAlignment="Center" />
+                        <Label
+                            FontSize="Micro"
+                            Text="{Binding ReceivedSpeed, Converter={StaticResource AdapterSpeedLongToStringConverter}}"
+                            VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                </HorizontalStackLayout>
 
             </Grid>
 
-        </VerticalStackLayout>
+        </Grid>
 
     </Border>
 

@@ -11,6 +11,22 @@ internal class NetworkAdapterService : INetworkAdapterService
     const string REGISTRY_VALUE_MAC = "NetworkAddress";
     const string REGISTRY_VALUE_ORIG_MAC = "OriginalNetworkAddress";
 
+    public long GetNetworkAdapterBytesReceived(NetworkAdapter adapter)
+    {
+        NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+        NetworkInterface? networkInterface = networkInterfaces.SingleOrDefault(n => n.Id == adapter.Id);
+
+        return networkInterface?.GetIPv4Statistics().BytesReceived ?? 0;
+    }
+
+    public long GetNetworkAdapterBytesSent(NetworkAdapter adapter)
+    {
+        NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+        NetworkInterface? networkInterface = networkInterfaces.SingleOrDefault(n => n.Id == adapter.Id);
+
+        return networkInterface?.GetIPv4Statistics().BytesSent ?? 0;
+    }
+
     public IEnumerable<NetworkAdapter> GetNetworkAdapters()
     {
         List<NetworkAdapter> networkAdapters = [];

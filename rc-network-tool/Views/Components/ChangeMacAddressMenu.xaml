@@ -70,7 +70,7 @@
             </Picker>
 
             <HorizontalStackLayout>
-                <CheckBox x:Name="Use02AsFirstOctetCheckBox" IsChecked="{Binding Use02AsFirstOctetIsEnabled}">
+                <CheckBox x:Name="Use02AsFirstOctetCheckBox" IsChecked="{Binding Use02AsFirstOctetIsChecked}">
 
                     <CheckBox.Behaviors>
                         <toolkit:EventToCommandBehavior
@@ -84,12 +84,12 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
-                <CheckBox IsChecked="{Binding RestartConnectionOnApplyIsEnabled}" />
+                <CheckBox IsChecked="{Binding RestartConnectionOnApplyIsChecked}" />
                 <Label Text="Automatically restart network connection to apply changes" VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
-                <CheckBox IsChecked="{Binding ReleaseIpAddressIsEnabled}" IsEnabled="{Binding RestartConnectionOnApplyIsEnabled}" />
+                <CheckBox IsChecked="{Binding ReleaseIpAddressIsChecked}" IsEnabled="{Binding RestartConnectionOnApplyIsChecked}" />
                 <Label Text="Release current IP address" VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
 

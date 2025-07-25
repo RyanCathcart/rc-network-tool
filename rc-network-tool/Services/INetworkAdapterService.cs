@@ -30,4 +30,22 @@ public interface INetworkAdapterService
     /// <param name="adapter">The network adapter to evaluate.</param>
     /// <returns><see langword="true"/> if the specified adapter is a wireless adapter; otherwise, <see langword="false"/>.</returns>
     bool IsNetworkAdapterWireless(NetworkAdapter adapter);
+
+    /// <summary>
+    /// Retrieves the total number of bytes sent by the specified network adapter since it was initialized or last reset.
+    /// </summary>
+    /// <remarks>Ensure the <paramref name="adapter"/> is properly configured and active before calling this
+    /// method.</remarks>
+    /// <param name="adapter">The <see cref="NetworkAdapter"/> instance representing the network adapter for which to retrieve the bytes sent.</param>
+    /// <returns>The total number of bytes sent by the specified network adapter.</returns>
+    public long GetNetworkAdapterBytesSent(NetworkAdapter adapter);
+
+    /// <summary>
+    /// Retrieves the total number of bytes received by the specified network adapter since it was initialized or last reset.
+    /// </summary>
+    /// <remarks>Ensure the <paramref name="adapter"/> is properly configured and active before calling this
+    /// method.</remarks>
+    /// <param name="adapter">The <see cref="NetworkAdapter"/> instance representing the network adapter for which to retrieve the bytes received.</param>
+    /// <returns>The total number of bytes received by the specified network adapter.</returns>
+    public long GetNetworkAdapterBytesReceived(NetworkAdapter adapter);
 }

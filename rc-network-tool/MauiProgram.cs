@@ -4,6 +4,10 @@ using Microsoft.Maui.LifecycleEvents;
 using rc_network_tool.Services;
 using rc_network_tool.ViewModels;
 using rc_network_tool.Views;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using LiveChartsCore.SkiaSharpView.Maui;
+
+
 
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Microsoft.UI.Composition.SystemBackdrops;
@@ -23,6 +27,8 @@ public static class MauiProgram
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
+            .UseSkiaSharp()
+            .UseLiveCharts()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

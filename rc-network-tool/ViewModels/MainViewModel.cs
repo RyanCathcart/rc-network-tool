@@ -1,25 +1,23 @@
-﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
 using rc_network_tool.Models;
 using rc_network_tool.Services;
 using rc_network_tool.Utils;
+using SkiaSharp;
+using System.Collections.ObjectModel;
 
 namespace rc_network_tool.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel(
+    INetworkAdapterService networkAdapterService, 
+    IMacOuiRegistryService macOuiRegistryService, 
+    IAlertService alertService) 
+    : ObservableObject
 {
-    private readonly INetworkAdapterService _networkAdapterService;
-    private readonly IMacOuiRegistryService _macOuiRegistryService;
-    private readonly IAlertService _alertService;
-
-    public MainViewModel(INetworkAdapterService networkAdapterService, IMacOuiRegistryService macOuiRegistryService, IAlertService alertService)
-    {
-        _networkAdapterService = networkAdapterService;
-        _macOuiRegistryService = macOuiRegistryService;
-        _alertService = alertService;
-    }
+    private const int ADAPTER_SPEED_HISTORY_SIZE = 120;
 
     [ObservableProperty]
     public partial ObservableRangeCollection<NetworkAdapter> NetworkAdapters { get; set; } = [];
@@ -31,19 +29,53 @@ public partial class MainViewModel : ObservableObject
     public partial NetworkAdapter? SelectedAdapter { get; set; } = null;
 
     [ObservableProperty]
+    public partial ObservableCollection<ISeries> Series { get; set; } = [];
+
+    [ObservableProperty]
+    public partial ObservableCollection<long> SentSeries { get; set; } = [];
+
+    [ObservableProperty]
+    public partial ObservableCollection<long> ReceivedSeries { get; set; } = [];
+
+    public Axis[] XAxes { get; set; } =
+    [
+        new Axis
+        {
+            Labels = Array.Empty<string>(),
+            SeparatorsPaint = null,
+        }
+    ];
+
+    public Axis[] YAxes { get; set; } =
+    [
+        new Axis
+        {
+            MinLimit = 0,
+            SeparatorsPaint = new SolidColorPaint(SKColors.DimGray),
+            LabelsPaint = new SolidColorPaint(SKColors.Transparent),
+        }
+    ];
+
+    [ObservableProperty]
+    public partial long SentSpeed { get; set; } = 0;
+
+    [ObservableProperty]
+    public partial long ReceivedSpeed { get; set; } = 0;
+
+    [ObservableProperty]
     public partial string MacAddressEntryText { get; set; } = "";
 
     [ObservableProperty]
     public partial int SelectedMacOuiVendorIndex { get; set; } = -1;
 
     [ObservableProperty]
-    public partial bool Use02AsFirstOctetIsEnabled { get; set; } = false;
+    public partial bool Use02AsFirstOctetIsChecked { get; set; } = false;
 
     [ObservableProperty]
-    public partial bool RestartConnectionOnApplyIsEnabled { get; set; } = true;
+    public partial bool RestartConnectionOnApplyIsChecked { get; set; } = true;
 
     [ObservableProperty]
-    public partial bool ReleaseIpAddressIsEnabled { get; set; } = true;
+    public partial bool ReleaseIpAddressIsChecked { get; set; } = true;
 
     [ObservableProperty]
     public partial bool ApplyButtonIsEnabled { get; set; }
@@ -56,11 +88,73 @@ public partial class MainViewModel : ObservableObject
     {
         RefreshNetworkAdapterDataGrid();
         await LoadMacOuiRegistryAsync();
+
+        for (int i = 0; i < ADAPTER_SPEED_HISTORY_SIZE; i++)
+        {
+            SentSeries.Add(0);
+            ReceivedSeries.Add(0);
+        }
+
+        var sentLineSeries = new LineSeries<long>
+        {
+            Values = SentSeries,
+            Name = "Sent",
+            GeometrySize = 0,
+            LineSmoothness = 0,
+            Stroke = new SolidColorPaint(new SKColor(172, 153, 234)) { StrokeThickness = 1 },
+            Fill = new SolidColorPaint(new SKColor(172, 153, 234, 32)),
+        };
+        Series.Add(sentLineSeries);
+
+        var receivedLineSeries = new LineSeries<long>
+        {
+            Values = ReceivedSeries,
+            Name = "Received",
+            GeometrySize = 0,
+            LineSmoothness = 0,
+            Stroke = new SolidColorPaint(SKColors.SteelBlue) { StrokeThickness = 1 },
+            Fill = new SolidColorPaint(SKColors.SteelBlue.WithAlpha(32)),
+        };
+        Series.Add(receivedLineSeries);
+
+        await MeasureNetworkSpeeds();
+    }
+
+    private async Task MeasureNetworkSpeeds()
+    {
+        var periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        //if (SelectedAdapter is null)
+        //    return;
+
+        long totalBytesSent;
+        long totalBytesReceived;
+
+        while (await periodicTimer.WaitForNextTickAsync())
+        {
+            if (SelectedAdapter is null || SelectedAdapter.OperationalStatus != "Up")
+                continue;
+
+            totalBytesSent = networkAdapterService.GetNetworkAdapterBytesSent(SelectedAdapter);
+            totalBytesReceived = networkAdapterService.GetNetworkAdapterBytesReceived(SelectedAdapter);
+
+            long uploadSpeed = networkAdapterService.GetNetworkAdapterBytesSent(SelectedAdapter) - totalBytesSent;
+            long downloadSpeed = networkAdapterService.GetNetworkAdapterBytesReceived(SelectedAdapter) - totalBytesReceived;
+            
+            SentSeries.RemoveAt(0);
+            ReceivedSeries.RemoveAt(0);
+
+            SentSeries.Add(uploadSpeed);
+            ReceivedSeries.Add(downloadSpeed);
+
+            SentSpeed = uploadSpeed;
+            ReceivedSpeed = downloadSpeed;
+        }
     }
 
     private async Task LoadMacOuiRegistryAsync()
     {
-        IEnumerable<MacOuiRegistrant> macOuiRegistrants = await _macOuiRegistryService.GetRegistrantsAsync();
+        IEnumerable<MacOuiRegistrant> macOuiRegistrants = await macOuiRegistryService.GetRegistrantsAsync();
 
         MacOuiRegistry.AddRange(macOuiRegistrants);
     }
@@ -68,7 +162,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void RefreshNetworkAdapterDataGrid()
     {
-        IEnumerable<NetworkAdapter> networkAdapters = _networkAdapterService.GetNetworkAdapters();
+        IEnumerable<NetworkAdapter> networkAdapters = networkAdapterService.GetNetworkAdapters();
         NetworkAdapters = new ObservableRangeCollection<NetworkAdapter>(networkAdapters);
 
         if (NetworkAdapters.Count > 0)
@@ -80,14 +174,23 @@ public partial class MainViewModel : ObservableObject
     {
         if (SelectedAdapter is null) return;
 
-        Use02AsFirstOctetIsEnabled = _networkAdapterService.IsNetworkAdapterWireless(SelectedAdapter);
+        Use02AsFirstOctetIsChecked = networkAdapterService.IsNetworkAdapterWireless(SelectedAdapter);
         RestoreButtonIsEnabled = SelectedAdapter.IsMacChanged;
+
+        ReceivedSeries.Clear();
+        SentSeries.Clear();
+
+        for (int i = 0; i < ADAPTER_SPEED_HISTORY_SIZE; i++)
+        {
+            ReceivedSeries.Add(0);
+            SentSeries.Add(0);
+        }
     }
 
     [RelayCommand]
     private void GenerateRandomMac()
     {
-        if (Use02AsFirstOctetIsEnabled)
+        if (Use02AsFirstOctetIsChecked)
         {
             char[] hexChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
             int randomIndex;
@@ -115,7 +218,7 @@ public partial class MainViewModel : ObservableObject
     {
         if (SelectedMacOuiVendorIndex < 0) return;
 
-        if (Use02AsFirstOctetIsEnabled) Use02AsFirstOctetIsEnabled = false;
+        if (Use02AsFirstOctetIsChecked) Use02AsFirstOctetIsChecked = false;
 
         string newMacAddress = MacOuiRegistry[SelectedMacOuiVendorIndex].Assignment!;
 
@@ -136,7 +239,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void Use02AsFirstOctetChanged()
     {
-        if (Use02AsFirstOctetIsEnabled)
+        if (Use02AsFirstOctetIsChecked)
         {
             if (MacAddressEntryText.Length < 2)
                 MacAddressEntryText = "02";
@@ -189,8 +292,8 @@ public partial class MainViewModel : ObservableObject
         // Validate MacAddressEntryText
         string newMacAddress = MacAddressEntryText.Replace(" ", "").Replace("-", "");
 
-        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(
-            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
+        bool successful = await networkAdapterService.SetNetworkAdapterMacAddressAsync(
+            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsChecked, ReleaseIpAddressIsChecked);
 
         if (successful)
         {
@@ -198,7 +301,7 @@ public partial class MainViewModel : ObservableObject
             networkAdapter?.CurrentMacAddress = NetworkAdapter.ConvertMacAddressToString(newMacAddress);
             networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
 
-            await _alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address changed successfully");
+            await alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address changed successfully");
         }
 
         ApplyButtonIsEnabled = true;
@@ -213,8 +316,8 @@ public partial class MainViewModel : ObservableObject
         RestoreButtonIsEnabled = false;
 
         string newMacAddress = "";
-        bool successful = await _networkAdapterService.SetNetworkAdapterMacAddressAsync(
-            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsEnabled, ReleaseIpAddressIsEnabled);
+        bool successful = await networkAdapterService.SetNetworkAdapterMacAddressAsync(
+            SelectedAdapter, newMacAddress, RestartConnectionOnApplyIsChecked, ReleaseIpAddressIsChecked);
 
         if (successful)
         {
@@ -222,7 +325,7 @@ public partial class MainViewModel : ObservableObject
             networkAdapter?.CurrentMacAddress = networkAdapter.OriginalMacAddress;
             networkAdapter?.IsMacChanged = networkAdapter.CurrentMacAddress != networkAdapter.OriginalMacAddress;
 
-            await _alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address restored successfully");
+            await alertService.ShowAlertAsync(title: SelectedAdapter.Name, "MAC address restored successfully");
         }
     }    
 }
